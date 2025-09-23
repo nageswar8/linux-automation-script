@@ -3,10 +3,12 @@ echo "Hello, I came here to automate"
 
 DOMAIN_NAME="idiap.shop"
 
-for i in $@:
+for i in "$@"
 do 
-    INSTANCE_ID=$(aws ec2 run-instances  --image-id ami-09c813fb71547fc4f --instance-type t2.micro --security-group-ids sg-0fecc4fefc0ae3b31 --region us-east-1 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value='$i'}]' --query 'Instances[0].InstanceId' --output text)
-    if [ $i -ne "frontend" ]; then 
+    INSTANCE_ID=$(aws ec2 run-instances  --image-id ami-09c813fb71547fc4f --instance-type t2.micro --security-group-ids sg-0fecc4fefc0ae3b31 --region us-east-1 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].InstanceId' --output text)
+    aws ec2 wait instance-running --instance-ids "$INSTANCE_ID"
+
+    if [ "$i" != "frontend" ]; then 
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[].Instances[].PrivateIpAddress' --output text)
     else
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[].Instances[].PublicIpAddress' --output text)
