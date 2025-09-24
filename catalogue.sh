@@ -62,6 +62,9 @@ mkdir -p /app
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "downloading catalogue"
 cd /app 
+
+rm -rf /app/* &>>$LOG_FILE
+VALIDATE $? " Remove old code "
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzip catalogue"
 
