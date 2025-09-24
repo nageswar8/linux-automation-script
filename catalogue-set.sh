@@ -23,7 +23,7 @@ fi
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 
-mkdir  $LOGS_FOLDER
+mkdir -p $LOGS_FOLDER
 
 echo "Script started executed $(date)" | tee -a $LOG_FILE
 
