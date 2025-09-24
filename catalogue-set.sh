@@ -40,23 +40,23 @@ VALIDATE() {
 
 dnf module list nodejs &>>$LOG_FILE
 
-VALIDATE $? "getting the node list"
+#VALIDATE $? "getting the node list"
 
 dnf module disable nodejs -y &>>$LOG_FILE
 
-VALIDATE $? "Disable nodejs"
+#VALIDATE $? "Disable nodejs"
 
 dnf module enable nodejs:20 -y &>>$LOG_FILE
-VALIDATE $? "enable 20 nodejs"
+#VALIDATE $? "enable 20 nodejs"
 
 dnf install nodejs -y &>>$LOG_FILE
 
-VALIDATE $? "installing nodejs"
+#VALIDATE $? "installing nodejs"
 
 id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-    VALIDATE $? "creating user"
+    #VALIDATE $? "creating user"
 else
     echo "Roboshop user already created"
 fi
@@ -64,46 +64,46 @@ fi
 mkdir -p /app
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
-VALIDATE $? "downloading catalogue"
+#VALIDATE $? "downloading catalogue"
 cd /app 
 
 rm -rf /app/* &>>$LOG_FILE
-VALIDATE $? " Remove old code "
+#VALIDATE $? " Remove old code "
 unzip /tmp/catalogue.zip &>>$LOG_FILE
-VALIDATE $? "unzip catalogue"
+#VALIDATE $? "unzip catalogue"
 
 npm install &>>$LOG_FILE
 
-VALIDATE $? "install dependencies"
+#VALIDATE $? "install dependencies"
 
 cp $CUR_DIR/catalogue.service /etc/systemd/system/catalogue.service
-VALIDATE $? "copying service"
+#VALIDATE $? "copying service"
 
 systemctl daemon-reload
-VALIDATE $? "reloading daemon"
+#VALIDATE $? "reloading daemon"
 
 systemctl enable catalogue &>>$LOG_FILE 
-VALIDATE $? "enable catalogue"
+#VALIDATE $? "enable catalogue"
 systemctl start catalogue &>>$LOG_FILE
-VALIDATE $? "start Catalogue"
+#VALIDATE $? "start Catalogue"
 
 cp $CUR_DIR/mongo.repo /etc/yum.repos.d/mongo.repo 
 
-VALIDATE $? "copy mongo repo"
+#VALIDATE $? "copy mongo repo"
 
 dnf install mongodb-mongosh -y &>>$LOG_FILE
-VALIDATE $? "install mongo client"
+#VALIDATE $? "install mongo client"
 
 INDEX=$(mongosh $MONGO_HOST --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
 if [ $INDEX -lt 0 ]; then
     mongosh --host $MONGO_HOST </app/db/master-data.js &>>$LOG_FILE
-    VALIDATE $? "Load catalogue products"
+    #VALIDATE $? "Load catalogue products"
 else
     echo -e "Catalogue products already loaded ... $Y SKIPPING $N"
 fi
 
 systemctl restart catalogue
 
-VALIDATE $? "Catalogue restarted"
+#VALIDATE $? "Catalogue restarted"
 
 
