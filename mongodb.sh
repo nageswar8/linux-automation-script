@@ -32,12 +32,16 @@ VALIDATE() {
 
 }
 
-dnf list installed mongodb &>>$LOG_FILE
+cp mongo.repo /etc/yum.repos.d/mongo.repo
+VALIDATE $? "Adding mongo repo"
+
+
+dnf list installed mongodb-org &>>$LOG_FILE
 
 
 if [ $? -ne 0 ]; then
-    dnf install mongodb -y &>>$LOG_FILE
-    VALIDATE $? "mongodb"
+    dnf install mongodb-org -y &>>$LOG_FILE
+    VALIDATE $? "mongodb-org"
 else
-    echo -e "mongodb already exist ... $Y SKIPPING $N"
+    echo -e "mongodb-org already exist ... $Y SKIPPING $N"
 fi
