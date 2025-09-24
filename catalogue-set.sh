@@ -11,6 +11,10 @@ LOGS_FOLDER="/var/log/shell-script"
 MONGO_HOST=mongodb.idiap.shop
 CUR_DIR=$PWD
 
+set -euo pipefail
+
+trap 'echo "there is error $LINENO and command $BASH_COMMAND"' ERR
+
 if [ $USERID -ne 0 ]; then
     echo -e "$R error:: user need root privileges"
     exit 1 
