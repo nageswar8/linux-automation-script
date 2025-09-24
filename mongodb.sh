@@ -46,6 +46,11 @@ else
     echo -e "mongodb-org already exist ... $Y SKIPPING $N"
 fi
 
-systemctl enable mongodb-org
-
+systemctl enable mongod
 VALIDATE $? "Starting mongo DB"
+
+
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
+VALIDATE $? "Replace global"
+
+systemctl restart mongod
