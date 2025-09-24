@@ -45,3 +45,7 @@ if [ $? -ne 0 ]; then
 else
     echo -e "mongodb-org already exist ... $Y SKIPPING $N"
 fi
+
+systemctl enable mongodb-org
+
+VALIDATE $? "Starting mongo DB"
