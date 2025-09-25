@@ -10,10 +10,27 @@ do
 
     if [ "$i" != "frontend" ]; then 
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[].Instances[].PrivateIpAddress' --output text)
+        aws route53 change-resource-record-sets  --hosted-zone-id Z09590552TMQIL7M10P1I \
+        --change-batch '{
+        "Comment": "Creating an A record",
+        "Changes": [
+        {
+            "Action": "UPSERT",
+            "ResourceRecordSet": {
+                "Name": "'$DOMAIN_NAME'",
+                "Type": "A",
+                "TTL": 1,
+                "ResourceRecords": [
+                    {
+                        "Value": "'$IP'"
+                    }
+                ]
+            }
+        }
+    ]
+}'
     else
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[].Instances[].PublicIpAddress' --output text)
-    fi
-
         aws route53 change-resource-record-sets  --hosted-zone-id Z09590552TMQIL7M10P1I \
         --change-batch '{
         "Comment": "Creating an A record",
@@ -33,4 +50,5 @@ do
         }
     ]
 }'
+    fi
 done
