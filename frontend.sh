@@ -67,3 +67,5 @@ unzip /tmp/frontend.zip
 VALIDATE $? " unzp fronend"
 
 cp $CUR_DIR/nginx.conf /etc/nginx/nginx.conf
+
+systemctl restart nginx 
