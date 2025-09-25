@@ -12,6 +12,7 @@ Y="\e[33m"
 N="\e[0m"
 
 LOGS_FOLDER="/var/log/shell-script"
+CUR_DIR=$PWD
 
 if [ $USERID -ne 0 ]; then
     echo -e "$R error:: user need root privileges"
