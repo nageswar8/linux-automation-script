@@ -61,7 +61,7 @@ pip3 install -r requirements.txt &>>LOG_FILE
 
 VALIDATE $? "install dependecies"
 
-cp $CUR_DIR/shipping.service /etc/systemd/system/payment.service
+cp $CUR_DIR/payment.service /etc/systemd/system/payment.service
 
 systemctl daemon-reload
 VALIDATE $? "daemon reload"
