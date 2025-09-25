@@ -57,10 +57,13 @@ else
 fi
 
 mkdir -p /app
+rm -rf /app/* &>>$LOG_FILE
+VALIDATE $? " Remove old code "
 
 curl -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>$LOG_FILE
 VALIDATE $? "downloading user"
 cd /app 
+
 
 unzip /tmp/shipping.zip
 
