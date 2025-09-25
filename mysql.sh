@@ -45,9 +45,9 @@ else
     echo -e "mysql already exist ... $Y SKIPPING $N"
 fi
 
-systemctl enable mysql 
+systemctl enable mysqld 
 VALIDATE $? "enabling "
-systemctl start mysql 
+systemctl start mysqld 
 VALIDATE $? "starting "
 
 mysql_secure_installation --set-root-pass RoboShop@1
